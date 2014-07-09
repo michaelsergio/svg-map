@@ -1,4 +1,9 @@
-  # Polymer Starter Project
+svg-map
+=======
+
+A polymer based map that can use existing SVG maps.
+
+# Polymer Starter Project
 
 This project includes a set of Polymer components and a starter project,
 designed to be used with the [Polymer tutorial](http://polymer-project.org/docs/start/tutorial/intro.html).
@@ -154,6 +159,4 @@ Coolest Flight Path
 
 
 This draws a path from San Francisco to Dubai over the Arctic on flight number ??
-
-
 
