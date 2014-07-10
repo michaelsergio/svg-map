@@ -1,5 +1,4 @@
 ﻿<link rel="import" href="../components/polymer/polymer.html">
-<link rel="import" href="../components/core-icon-button/core-icon-button.html">
 
 <polymer-element name="svg-map">
   <template>
@@ -19,30 +18,37 @@
     .map {
       width:80%;
     }
-
     </style>
 
     <!-- CARD CONTENTS GO HERE -->
-    <template if={{title}}>
-      <div layout center>{{title}}
+    <template if="{{title}}">
+      <div layout center>{{title}}</div>
     </template>
     <div horizontal center>
-        <object data="../maps/BlankMap-World6.svg" type="image/svg+xml"
-                id="map" class="map"></object>
+      <object data="../maps/BlankMap-World6.svg" type="image/svg+xml"
+        id="map" class="map"></object>
     </div>
-  </div>
     
   </template>
+
   <script>
-  (function () {
-   'use strict';
-   var children = document.children;
-   console.log(children);
-   console.log("hello polymer");
-  });
+(function() {
+  'use strict';
+
+  // Our element
+  var svgmap = window.svgmap = {};
+
+  svgmap.initialize = function() {
+    var children = document.children;
+    console.log(children);
+    console.log("hello polymer");
+  };
 
   Polymer({
-      
+    created: function () {
+      svgmap.initialize();
+    }
   });
+})();
   </script>
 </polymer-element>
