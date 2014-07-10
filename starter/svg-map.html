@@ -166,7 +166,8 @@
       svgmap.initializeDOM();
   });
 
-  Polymer({
+  Polymer('svg-map', {
+    source:"../maps/BlankMap-World6.svg",
     created: function () {
       svgmap.initialize();
     }
