@@ -1,0 +1,48 @@
+﻿<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/core-icon-button/core-icon-button.html">
+
+<polymer-element name="svg-map">
+  <template>
+    <style>
+    :host {
+      display: block;
+      position: relative;
+      background-color: white;
+      padding: 20px;
+      width: 100%;
+      font-size: 1.2rem;
+      font-weight: 300;
+    }
+    .card-header {
+      margin-bottom: 10px;
+    }
+    .map {
+      width:80%;
+    }
+
+    </style>
+
+    <!-- CARD CONTENTS GO HERE -->
+    <template if={{title}}>
+      <div layout center>{{title}}
+    </template>
+    <div horizontal center>
+        <object data="../maps/BlankMap-World6.svg" type="image/svg+xml"
+                id="map" class="map"></object>
+    </div>
+  </div>
+    
+  </template>
+  <script>
+  (function () {
+   'use strict';
+   var children = document.children;
+   console.log(children);
+   console.log("hello polymer");
+  });
+
+  Polymer({
+      
+  });
+  </script>
+</polymer-element>
