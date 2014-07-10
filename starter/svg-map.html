@@ -39,27 +39,95 @@
   var svgmap = window.svgmap = {};
 
   svgmap.initialize = function() {
+    this.options = {};
+    this.options.opacifyValue = 0.4;
+    this.options.colorOcean = '#D6FFFF';
+    this.options.colorAntartica = '#E6FFFF';
+
+    // Need a way to color by class rather than id
+    this.options.colorLand = 'brown';
   };
 
   svgmap.initializeDOM = function() {
     // assumes only svg-map on page :(
-    this.elem = document.getElementsByTagName("svg-map").item(0);
-    this.regions = this.elem.getElementsByTagName("region");
-    this.mapElem = this.elem.shadowRoot.getElementsByTagName("object").item(0);
+    this.elem = document.getElementsByTagName('svg-map').item(0);
+    this.mapElem = this.elem.shadowRoot.getElementsByTagName('object').item(0);
+    this.regions = this.elem.getElementsByTagName('region');
+    // TODO: need to wait for contentDocument to finish loading
+    //       before trying to render regions.
+    this.onSVGDocumentLoaded();
   };
+  
+  svgmap.onSVGDocumentLoaded = function() {
+    this.fillInRegions();
+    this.colorPrettyDefaults();
+  };
+
+  svgmap.fillInRegions = function() {
+    console.log('trying to fill in regions');
+    var i;
+    for (i = 0; i < this.regions.length; i++) {
+      var region = this.regions[i],
+          color = region.getAttribute('color'),
+          id = region.getAttribute('id');
+      if (id && color) {
+        this.colorRegion(id, color);
+      }
+    }
+  };
+
+  // Code Related to map
 
   svgmap.colorRegion = function(id, color) {
     svgmap.regionApply(id, function(region) {
       if (region === null) {
-        console.log("Region not found: " + id);
+        console.log('Region not found: ' + id);
         return;
       }
       region.style.fill = color;
     });
   };
 
-  svgmap.fill = function(cc) {
-    svgmap.colorRegion(cc, "blue");
+  svgmap.resetMap = function() {
+    // Maybe this would work if I applied it to class 'land'.
+    /*
+    this.collection.map(function(nation) {
+      var cc = nation.id;
+      this.regionApply(cc, function(region) {
+        region.style['fill-opacity'] = 1; 
+      });
+    }, this);
+    */
+  };
+
+  svgmap.setMouseEvents = function(cc, shouldOpacify) {
+    this.region(cc, function(region) {
+      region.onmouseover = function() {
+        // TODO: mouse over delegate
+        if (shouldOpacify) {
+          svgmap.opacify(cc, this.options.opacifyValue);
+        }
+      };
+      region.onmouseout = function() {
+        if (shouldOpacify) {
+          svgmap.opacify(cc, 1);
+        }
+      };
+      region.onclick = function() {
+        // TODO: Replace with onclick delegate
+      };
+
+    });
+  };
+
+  // Set the ocean and Antartic colors for the world map
+  svgmap.colorPrettyDefaults = function() {
+    if (this.options.colorOcean) {
+      this.colorRegion('ocean', this.options.colorOcean);
+    }
+    if (this.options.colorAntartica) {
+      this.colorRegion('aq', this.options.colorAntartica);
+    }
   };
 
   /*
@@ -74,7 +142,7 @@
     var i, paths;
     var region = this.mapElem.contentDocument.getElementById(cc);
     if (!region) {
-      console.log("Country not found: " + cc);
+      console.log('Region not found: ' + cc);
       return;
     }
     fn(region);
@@ -85,10 +153,11 @@
     }
   };
 
+
+  // Event for initializing after shadow dom has loaded.
   window.addEventListener('polymer-ready', function(e) {
       svgmap.initializeDOM();
   });
-
 
   Polymer({
     created: function () {
