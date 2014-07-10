@@ -39,10 +39,11 @@
   var svgmap = window.svgmap = {};
 
   svgmap.initialize = function() {
-    this.options = {};
-    this.options.opacifyValue = 0.4;
-    this.options.colorOcean = '#D6FFFF';
-    this.options.colorAntartica = '#E6FFFF';
+    this.options = {
+      opacifyValue: 0.4;
+      colorOcean: '#D6FFFF';
+      colorAntartica: '#E6FFFF';
+    };
 
     // Need a way to color by class rather than id
     this.options.colorLand = 'brown';
