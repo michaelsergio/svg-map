@@ -35,6 +35,10 @@
     background: #03a9f4;
     color: white;
   }
+
+  div.tab.hidden {
+    display:none;
+  }
   #tabs {
     width: 100%;
     margin: 0;
@@ -61,21 +65,65 @@
 <body unresolved touch-action="auto">
   <core-header-panel>
     <core-toolbar>
-      <paper-tabs id="tabs" selected="all" valueattr="name" self-end>
-        <paper-tab name="all">ALL</paper-tab>
-        <paper-tab name="favorites">FAVORITES</paper-tab>
+      <paper-tabs id="tabs" selected="0" valueattr="name" self-end>
+        <paper-tab name="world">Cold War</paper-tab>
+        <paper-tab name="northern">Northern</paper-tab>
       </paper-tabs>
     </core-toolbar>
   </core-header-panel> 
-  <svg-map title="Blank Map">
-    <region id="us" color="blue"></region>
-    <p>hello</p>
-  </svg-map>
+
+  <div id="world" class="tab">
+    <svg-map title="Cold War Affiliations"
+             source="../maps/BlankMap-World6.svg">
+      <region id="us" color="blue"></region>
+      <region id="it" color="cyan"></region>
+      <region id="gb" color="cyan"></region>
+      <region id="is" color="cyan"></region>
+      <region id="es" color="cyan"></region>
+      <region id="pt" color="cyan"></region>
+      <region id="fr" color="cyan"></region>
+      <region id="se" color="cyan"></region>
+      <region id="gb" color="cyan"></region>
+      <region id="gb" color="cyan"></region>
+      <region id="gb" color="cyan"></region>
+      <region id="ru" color="red"></region>
+      <region id="az" color="pink"></region>
+      <region id="am" color="pink"></region>
+      <region id="ro" color="pink"></region>
+      <region id="uk" color="pink"></region>
+      <region id="uz" color="pink"></region>
+      <region id="de" color="yellow"></region>
+    </svg-map>
+  </div>
+  <div id="northern" class="tab hidden">
+      <svg-map-div title="Cold War Affiliations (Northern Hemisphere)"
+               source="../maps/northern-hempisphere.svg">
+        <region id="gUS1" color="blue"></region>
+        <region id="gRUS" color="red"></region>
+        <region id="gDEU" color="yellow"></region>
+        <region id="gARE" color="purple"></region>
+      </svg-map-div>
+  </div>
+
   <script>
+  (function() {
     var tabs = document.querySelector('paper-tabs');
     tabs.addEventListener('core-select', function() {
-        console.log("Selected: " + tabs.selected);
+      var selected = tabs.selected;
+      console.log("Selected: " + selected);
+      var currentlyShown = document.querySelector('.hidden');
+      if (currentlyShown) {
+        currentlyShown.setAttribute("class", "hidden");
+        svgmap.onSVGDocumentLoaded();
+      }
+
+      var elem = document.getElementById(selected);
+      elem.setAttribute("class", "tab");
     });
+    // start by showing world
+    document.getElementById("northern").setAttribute("class", "tab hidden");
+    })();
+
   </script>
   
 </body>
