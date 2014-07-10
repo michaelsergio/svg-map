@@ -39,10 +39,56 @@
   var svgmap = window.svgmap = {};
 
   svgmap.initialize = function() {
-    var children = document.children;
-    console.log(children);
-    console.log("hello polymer");
   };
+
+  svgmap.initializeDOM = function() {
+    // assumes only svg-map on page :(
+    this.elem = document.getElementsByTagName("svg-map").item(0);
+    this.regions = this.elem.getElementsByTagName("region");
+    this.mapElem = this.elem.shadowRoot.getElementsByTagName("object").item(0);
+  };
+
+  svgmap.colorRegion = function(id, color) {
+    svgmap.regionApply(id, function(region) {
+      if (region === null) {
+        console.log("Region not found: " + id);
+        return;
+      }
+      region.style.fill = color;
+    });
+  };
+
+  svgmap.fill = function(cc) {
+    svgmap.colorRegion(cc, "blue");
+  };
+
+  /*
+   * Because countries are made up of mutiple paths,
+   * this is used to apply functions to countries.
+   * cc -  ISO_3166 country codes + some missing old countries
+   * fn - functions(region) region will be a region element
+   */
+  svgmap.regionApply = function(cc, fn) {
+    // using ISO_3166 country codes
+    // http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+    var i, paths;
+    var region = this.mapElem.contentDocument.getElementById(cc);
+    if (!region) {
+      console.log("Country not found: " + cc);
+      return;
+    }
+    fn(region);
+
+    paths = region.getElementsByTagName('path');
+    for (i = 0; i < paths.length; i++) {
+      fn(paths[i]);
+    }
+  };
+
+  window.addEventListener('polymer-ready', function(e) {
+      svgmap.initializeDOM();
+  });
+
 
   Polymer({
     created: function () {
